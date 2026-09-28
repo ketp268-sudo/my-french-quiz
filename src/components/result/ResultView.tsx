@@ -23,8 +23,8 @@ export function ResultView() {
 
   if (status === "loading") {
     return (
-      <div className="mx-auto max-w-2xl px-4 py-16 text-center sm:px-6">
-        <p className="text-lg">กำลังจัดเรียงผลลัพธ์…</p>
+      <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6">
+        <p className="text-xl">กำลังจัดเรียงผลลัพธ์…</p>
       </div>
     );
   }
