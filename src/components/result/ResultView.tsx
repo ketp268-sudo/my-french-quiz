@@ -31,14 +31,14 @@ export function ResultView() {
 
   if (status === "empty" || !profile) {
     return (
-      <div className="mx-auto max-w-2xl px-4 py-16 text-center sm:px-6">
-        <div className="quiz-box rounded-2xl p-8 shadow-sm">
-          <h1 className="text-2xl font-bold">ยังไม่มีผลลัพธ์</h1>
-          <p className="mt-3 text-base leading-relaxed">
+      <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6">
+        <div className="quiz-box rounded-2xl shadow-sm">
+          <h1 className="text-3xl font-bold sm:text-4xl">ยังไม่มีผลลัพธ์</h1>
+          <p className="mt-4 text-lg leading-relaxed sm:text-xl">
             ดูเหมือนคุณยังตอบควิซไม่ครบ หรือยังไม่ได้เริ่มสำรวจ
             ลองตอบคำถามสถานการณ์ 10 ข้อก่อนนะ
           </p>
-          <Button href="/quiz" className="mt-6 w-full sm:w-auto">
+          <Button href="/quiz" className="mt-8 w-full sm:w-auto">
             ไปทำควิซ
           </Button>
         </div>
@@ -47,16 +47,18 @@ export function ResultView() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-5 px-4 py-8 sm:px-6 sm:py-10">
-      <section className="quiz-box rounded-2xl p-6 shadow-sm sm:p-8">
-        <p className="text-sm font-semibold text-black/75">ภาพรวมของคุณ</p>
-        <h1 className="mt-2 text-2xl font-bold leading-snug sm:text-3xl">
+    <div className="mx-auto max-w-3xl space-y-6 px-4 py-8 sm:px-6 sm:py-10">
+      <section className="quiz-box rounded-2xl shadow-sm">
+        <p className="text-base font-semibold text-black/75 sm:text-lg">
+          ภาพรวมของคุณ
+        </p>
+        <h1 className="mt-3 text-3xl font-bold leading-snug sm:text-5xl">
           สวัสดี! นี่คือโปรไฟล์การสำรวจของคุณ
         </h1>
-        <p className="mt-4 text-base leading-relaxed sm:text-lg">
+        <p className="mt-5 text-lg leading-relaxed sm:text-2xl">
           {profile.overview}
         </p>
-        <p className="mt-4 text-sm text-black/75">
+        <p className="mt-5 text-base text-black/75 sm:text-lg">
           จุดเด่นหลัก: {DIMENSION_LABELS[profile.primaryDimension]} · รอง:{" "}
           {DIMENSION_LABELS[profile.secondaryDimension]}
         </p>
@@ -130,9 +132,9 @@ function ResultBlock({
   children: ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-black/10 bg-white/55 p-5 shadow-sm sm:p-6">
-      <h2 className="text-lg font-bold sm:text-xl">{title}</h2>
-      <div className="mt-3 text-base leading-relaxed">{children}</div>
+    <section className="content-box rounded-2xl border border-black/10 bg-white/55 shadow-sm">
+      <h2 className="text-2xl font-bold sm:text-3xl">{title}</h2>
+      <div className="mt-4 text-lg leading-relaxed sm:text-xl">{children}</div>
     </section>
   );
 }

@@ -14,13 +14,15 @@ export function QuestionCard({
   onSelect,
 }: QuestionCardProps) {
   return (
-    <section className="quiz-box rounded-2xl p-5 shadow-sm sm:p-7">
-      <h1 className="text-xl font-bold leading-snug sm:text-2xl">
+    <section className="quiz-box rounded-2xl shadow-sm">
+      <h1 className="text-2xl font-bold leading-snug sm:text-4xl">
         {question.prompt}
       </h1>
-      <p className="mt-2 text-sm text-black/80">เลือกได้ 1 ข้อ — ไม่มีถูกหรือผิด</p>
+      <p className="mt-3 text-base text-black/80 sm:text-lg">
+        เลือกได้ 1 ข้อ — ไม่มีถูกหรือผิด
+      </p>
 
-      <ul className="mt-5 space-y-3">
+      <ul className="mt-8 space-y-4">
         {question.choices.map((choice) => {
           const selected = selectedId === choice.id;
           return (
@@ -29,7 +31,7 @@ export function QuestionCard({
                 type="button"
                 onClick={() => onSelect(choice)}
                 className={[
-                  "w-full rounded-xl border px-4 py-3.5 text-left text-base leading-snug transition",
+                  "w-full rounded-xl border px-5 py-6 text-left text-lg leading-snug transition sm:px-6 sm:py-7 sm:text-xl",
                   selected
                     ? "border-[var(--accent-blue)] bg-white/85 shadow-sm"
                     : "border-black/10 bg-white/55 hover:bg-white/75",

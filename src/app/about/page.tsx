@@ -17,20 +17,20 @@ const blocks = [
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6 sm:py-14">
+    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
       <h1 className="text-3xl font-bold sm:text-4xl">เกี่ยวกับควิซ</h1>
       <p className="mt-3 text-base leading-relaxed sm:text-lg">
         ฝรั่งเศสของฉัน ออกแบบมาให้เหมือนเพื่อนชวนคุย ไม่ใช่ครูตรวจข้อสอบ
       </p>
 
-      <div className="mt-8 space-y-4">
+      <div className="mt-8 space-y-5">
         {blocks.map((block) => (
           <section
             key={block.title}
-            className="rounded-2xl border border-black/10 bg-[rgba(100,170,230,0.28)] p-5 sm:p-6"
+            className="content-box rounded-2xl border border-black/10 bg-[rgba(100,170,230,0.28)]"
           >
-            <h2 className="text-lg font-bold sm:text-xl">{block.title}</h2>
-            <p className="mt-2 text-base leading-relaxed">{block.body}</p>
+            <h2 className="text-2xl font-bold sm:text-3xl">{block.title}</h2>
+            <p className="mt-3 text-lg leading-relaxed sm:text-xl">{block.body}</p>
           </section>
         ))}
       </div>

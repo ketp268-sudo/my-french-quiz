@@ -1,16 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --bg-red: rgba(220, 80, 80, 0.5);
+  /* Clearer, more saturated red at ~50% opacity (was rgba(220, 80, 80, 0.5)) */
+  --bg-red: rgba(210, 32, 32, 0.52);
   --text: #000000;
   --quiz-box: rgba(100, 170, 230, 0.55);
-  --btn-primary: #d45a5a;
+  --btn-primary: #d04545;
   --btn-primary-text: #000000;
   --accent-blue: #4a9fd4;
   --progress-track: rgba(0, 0, 0, 0.08);
   --progress-fill: #4a9fd4;
-  --surface-under: #fff5f2;
+  /* Warmer under-surface so the red wash reads redder, not pink-beige */
+  --surface-under: #ffe3dc;
+  --surface-under-mid: #ffd6cc;
   --font-site: "CS Prajad", "Sarabun", "Noto Sans Thai", "Tahoma", sans-serif;
+  /* Content / question boxes ~2× prior scale */
+  --content-box-pad: 2.5rem;
+  --content-box-pad-lg: 3.5rem;
+  --content-box-min-h: 22rem;
 }
 
 @theme inline {
@@ -60,8 +67,8 @@ body {
   isolation: isolate;
   background-color: var(--surface-under);
   background-image:
-    radial-gradient(rgba(0, 0, 0, 0.035) 1px, transparent 1px),
-    linear-gradient(160deg, #fff8f5 0%, #f3f8fc 55%, #fff5f2 100%);
+    radial-gradient(rgba(180, 40, 40, 0.06) 1px, transparent 1px),
+    linear-gradient(160deg, #ffe8e0 0%, #ffd9cf 45%, var(--surface-under-mid) 100%);
   background-size:
     18px 18px,
     auto;
@@ -80,6 +87,27 @@ body {
   background: var(--quiz-box);
   color: var(--text);
   backdrop-filter: blur(2px);
+  padding: var(--content-box-pad);
+  min-height: var(--content-box-min-h);
+}
+
+@media (min-width: 640px) {
+  .quiz-box {
+    padding: var(--content-box-pad-lg);
+    min-height: 26rem;
+  }
+}
+
+.content-box {
+  padding: var(--content-box-pad);
+  min-height: 12rem;
+}
+
+@media (min-width: 640px) {
+  .content-box {
+    padding: var(--content-box-pad-lg);
+    min-height: 14rem;
+  }
 }
 
 a {

@@ -45,20 +45,22 @@ export function QuizFlow() {
 
   if (submitting) {
     return (
-      <div className="mx-auto flex max-w-2xl flex-col items-center px-4 py-20 text-center sm:px-6">
-        <div className="quiz-box w-full max-w-md rounded-2xl p-8 shadow-sm">
-          <p className="text-xl font-bold">กำลังสรุปผล…</p>
-          <p className="mt-3 text-base">กำลังจัดโปรไฟล์ของคุณให้อ่านง่ายๆ สักครู่</p>
+      <div className="mx-auto flex max-w-3xl flex-col items-center px-4 py-20 text-center sm:px-6">
+        <div className="quiz-box w-full max-w-xl rounded-2xl shadow-sm">
+          <p className="text-2xl font-bold sm:text-3xl">กำลังสรุปผล…</p>
+          <p className="mt-4 text-lg sm:text-xl">
+            กำลังจัดโปรไฟล์ของคุณให้อ่านง่ายๆ สักครู่
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 sm:py-10">
+    <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10">
       <ProgressBar current={index + 1} total={TOTAL_QUESTIONS} />
 
-      <div className="mt-6">
+      <div className="mt-8">
         <QuestionCard
           question={question}
           selectedId={selectedId}

@@ -51,9 +51,9 @@ Until those files exist, the CSS falls back to Sarabun / Noto Sans Thai / Tahoma
 
 ## Visual tokens
 
-- Background red ~50%: `rgba(220, 80, 80, 0.5)` over a soft under-surface
+- Background red ~50%: `rgba(210, 32, 32, 0.52)` over warm under-surface `#ffe3dc`
 - Text: `#000000`
-- Question box: `rgba(100, 170, 230, 0.55)`
+- Question box: `rgba(100, 170, 230, 0.55)` (padding via `--content-box-pad` / `--content-box-pad-lg`, ~2× prior scale)
 
 ## Notes
 
