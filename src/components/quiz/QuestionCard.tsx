@@ -1,26 +1,26 @@
 "use client";
 
-import type { Choice, Question } from "@/data/questions";
+import type { Choice, Question } from "@/data/question-defs";
 
 type QuestionCardProps = {
   question: Question;
   selectedId?: string;
   onSelect: (choice: Choice) => void;
+  hint: string;
 };
 
 export function QuestionCard({
   question,
   selectedId,
   onSelect,
+  hint,
 }: QuestionCardProps) {
   return (
     <section className="quiz-box rounded-2xl shadow-sm">
       <h1 className="text-2xl font-bold leading-snug sm:text-4xl">
         {question.prompt}
       </h1>
-      <p className="mt-3 text-base text-black/80 sm:text-lg">
-        เลือกได้ 1 ข้อ — ไม่มีถูกหรือผิด
-      </p>
+      <p className="mt-3 text-base text-black/80 sm:text-lg">{hint}</p>
 
       <ul className="mt-8 space-y-4">
         {question.choices.map((choice) => {
@@ -38,7 +38,9 @@ export function QuestionCard({
                 ].join(" ")}
                 aria-pressed={selected}
               >
-                <span className="mr-2 font-semibold">{choice.id.toUpperCase()}.</span>
+                <span className="mr-2 font-semibold">
+                  {choice.id.toUpperCase()}.
+                </span>
                 {choice.label}
               </button>
             </li>

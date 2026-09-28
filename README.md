@@ -1,8 +1,9 @@
-# ฝรั่งเศสของฉัน
+# ฝรั่งเศสของฉัน / My French
 
 Interactive self-discovery quiz for Thai secondary students who are considering learning French.
 
-ไม่ใช่ข้อสอบ ไม่มีผ่าน/ไม่ผ่าน และไม่บอกว่า “เหมาะ/ไม่เหมาะ” — ผลลัพธ์เป็นโปรไฟล์หลายมิติ (ความสนใจ เป้าหมาย สไตล์การเรียน แรงจูงใจ การเตรียมตัว)
+ไม่ใช่ข้อสอบ ไม่มีผ่าน/ไม่ผ่าน และไม่บอกว่า “เหมาะ/ไม่เหมาะ” — ผลลัพธ์เป็นโปรไฟล์หลายมิติ  
+Not a test — no pass/fail, and never “suitable/unsuitable.” Results are a multi-dimension profile.
 
 ## Stack
 
@@ -15,7 +16,7 @@ npm install
 npm run dev -- -p 43127 -H 127.0.0.1
 ```
 
-Open [http://127.0.0.1:43127](http://127.0.0.1:43127)
+Open [http://127.0.0.1:43127](http://127.0.0.1:43127) (redirects to `/th` by default)
 
 Other scripts:
 
@@ -25,15 +26,22 @@ npm run start -- -p 43127
 npm run lint
 ```
 
+## Language (TH / EN)
+
+- **Thai (default):** `/th`, `/th/quiz`, `/th/result`, …
+- **English:** `/en`, `/en/quiz`, `/en/result`, …
+- Use the **TH / EN** switcher in the header (same page, other language).
+- Visiting `/` redirects to the last chosen locale for the session (cookie `quiz_locale`), or Thai by default.
+
 ## Pages
 
-| Path | หน้าที่ |
-|------|---------|
-| `/` | หน้าแรก — ทักทาย + ปุ่มเริ่มสำรวจ |
-| `/about` | เกี่ยวกับควิซ |
-| `/quiz` | คำถามสถานการณ์ 10 ข้อ ทีละข้อ |
-| `/result` | โปรไฟล์ผลลัพธ์ |
-| `/tips` | เคล็ดลับเริ่มต้น (อ่านได้โดยไม่ต้องทำควิซ) |
+| Path | Thai | English |
+|------|------|---------|
+| `/{locale}` | หน้าแรก | Home |
+| `/{locale}/about` | เกี่ยวกับควิซ | About the quiz |
+| `/{locale}/quiz` | คำถาม 10 ข้อ | 10 situation questions |
+| `/{locale}/result` | โปรไฟล์ผลลัพธ์ | Result profile |
+| `/{locale}/tips` | เคล็ดลับเริ่มต้น | Starter tips |
 
 ## Font: CS Prajad (user must add)
 
@@ -58,4 +66,5 @@ Until those files exist, the CSS falls back to Sarabun / Noto Sans Thai / Tahoma
 ## Notes
 
 - Answers are kept in `sessionStorage` for the current browser tab only (no auth/DB).
-- Content and scoring follow the approved design docs in the project store.
+- Scoring dimensions are the same in both languages; only labels and prose change.
+- Content follows the approved design docs in the project store.

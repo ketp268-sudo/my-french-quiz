@@ -1,27 +1,31 @@
 import {
   DIMENSION_ORDER,
-  Dimension,
-  ThemeTag,
-  questions,
-  type ScoreMap,
-} from "@/data/questions";
-import {
-  GOAL_COPY,
-  INTEREST_THEME_LABELS,
-  OVERVIEW_BY_PAIR,
-  PREPARATION_BY_READINESS,
-  STARTER_TIPS_BY_STYLE,
-  STRENGTHS_BY_DIMENSION,
-  STYLE_COPY,
+  questionDefs,
   THEME_TO_STYLE,
-  type ResultProfile,
-} from "@/data/result-copy";
+  type Dimension,
+  type ScoreMap,
+  type ThemeTag,
+} from "@/data/question-defs";
+import type { Messages, StyleKey } from "@/i18n/types";
 
 export type AnswerMap = Record<string, string>;
 
 export type Totals = Record<Dimension, number>;
 
 export type ThemeCounts = Partial<Record<ThemeTag, number>>;
+
+export type ResultProfile = {
+  overview: string;
+  strengths: string[];
+  interests: { primary: string; secondary: string };
+  goals: string;
+  learningStyle: string;
+  preparation: string[];
+  tips: string[];
+  primaryDimension: Dimension;
+  secondaryDimension: Dimension;
+  totals: Totals;
+};
 
 const emptyTotals = (): Totals => ({
   interest: 0,
@@ -38,7 +42,7 @@ export function scoreAnswers(answers: AnswerMap): {
   const totals = emptyTotals();
   const themes: ThemeCounts = {};
 
-  for (const question of questions) {
+  for (const question of questionDefs) {
     const choiceId = answers[question.id];
     if (!choiceId) continue;
     const choice = question.choices.find((c) => c.id === choiceId);
@@ -77,25 +81,36 @@ function topThemes(themes: ThemeCounts, limit = 4): ThemeTag[] {
     .map(([tag]) => tag);
 }
 
-function pickOverview(primary: Dimension, secondary: Dimension): string {
+function pickOverview(
+  messages: Messages,
+  primary: Dimension,
+  secondary: Dimension,
+): string {
   const key = `${primary}+${secondary}`;
   const reverse = `${secondary}+${primary}`;
   return (
-    OVERVIEW_BY_PAIR[key] ??
-    OVERVIEW_BY_PAIR[reverse] ??
-    OVERVIEW_BY_PAIR[`${primary}+interest`] ??
-    "คุณกำลังสำรวจตัวเองก่อนเริ่มเรียนฝรั่งเศส และดูมีจุดเด่นที่น่าสนใจหลายด้าน ควิซนี้ช่วยให้เห็นภาพชัดขึ้นว่าอยากเรียนแบบไหน"
+    messages.overviewByPair[key] ??
+    messages.overviewByPair[reverse] ??
+    messages.overviewByPair[`${primary}+interest`] ??
+    messages.result.overviewFallback
   );
 }
 
-function pickStrengths(primary: Dimension, secondary: Dimension): string[] {
-  const primaryList = STRENGTHS_BY_DIMENSION[primary] ?? [];
-  const secondaryList = STRENGTHS_BY_DIMENSION[secondary] ?? [];
+function pickStrengths(
+  messages: Messages,
+  primary: Dimension,
+  secondary: Dimension,
+): string[] {
+  const primaryList = messages.strengthsByDimension[primary] ?? [];
+  const secondaryList = messages.strengthsByDimension[secondary] ?? [];
   const merged = [...primaryList.slice(0, 2), ...secondaryList.slice(0, 2)];
   return Array.from(new Set(merged)).slice(0, 4);
 }
 
-function pickInterests(themes: ThemeCounts): { primary: string; secondary: string } {
+function pickInterests(
+  messages: Messages,
+  themes: ThemeCounts,
+): { primary: string; secondary: string } {
   const ranked = topThemes(themes, 6).filter((t) =>
     ["travel", "food", "arts", "communication", "culture", "fun", "future"].includes(
       t,
@@ -106,12 +121,16 @@ function pickInterests(themes: ThemeCounts): { primary: string; secondary: strin
   const secondaryTag = ranked[1] ?? "communication";
 
   return {
-    primary: INTEREST_THEME_LABELS[primaryTag] ?? "วัฒนธรรมและการเรียนรู้",
-    secondary: INTEREST_THEME_LABELS[secondaryTag] ?? "การสื่อสารในชีวิตประจำวัน",
+    primary:
+      messages.interestThemes[primaryTag] ??
+      messages.result.interestFallbackPrimary,
+    secondary:
+      messages.interestThemes[secondaryTag] ??
+      messages.result.interestFallbackSecondary,
   };
 }
 
-function pickStyleKey(themes: ThemeCounts): keyof typeof STYLE_COPY {
+function pickStyleKey(themes: ThemeCounts): StyleKey {
   const styleThemes = topThemes(themes, 8).filter((t) => t in THEME_TO_STYLE);
   const mapped = styleThemes.map((t) => THEME_TO_STYLE[t]!);
   if (mapped.length === 0) return "listenSpeak";
@@ -121,27 +140,36 @@ function pickStyleKey(themes: ThemeCounts): keyof typeof STYLE_COPY {
     counts[key] = (counts[key] ?? 0) + 1;
   }
   return (Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] ??
-    "listenSpeak") as keyof typeof STYLE_COPY;
+    "listenSpeak") as StyleKey;
 }
 
-function pickGoals(themes: ThemeCounts, totals: Totals): string {
+function pickGoals(
+  messages: Messages,
+  themes: ThemeCounts,
+  totals: Totals,
+): string {
   const goalThemes = topThemes(themes, 6);
   for (const tag of goalThemes) {
-    if (tag in GOAL_COPY) return GOAL_COPY[tag as keyof typeof GOAL_COPY];
+    if (tag in messages.goalCopy) {
+      return messages.goalCopy[tag as keyof typeof messages.goalCopy];
+    }
   }
   if (totals.goals >= totals.interest) {
-    return GOAL_COPY.travel;
+    return messages.goalCopy.travel;
   }
-  return GOAL_COPY.culture;
+  return messages.goalCopy.culture;
 }
 
-function pickPreparation(totals: Totals): string[] {
-  if (totals.readiness >= 6) return PREPARATION_BY_READINESS.high;
-  if (totals.readiness >= 3) return PREPARATION_BY_READINESS.mid;
-  return PREPARATION_BY_READINESS.gentle;
+function pickPreparation(messages: Messages, totals: Totals): string[] {
+  if (totals.readiness >= 6) return messages.preparationByReadiness.high;
+  if (totals.readiness >= 3) return messages.preparationByReadiness.mid;
+  return messages.preparationByReadiness.gentle;
 }
 
-export function buildResultProfile(answers: AnswerMap): ResultProfile {
+export function buildResultProfile(
+  answers: AnswerMap,
+  messages: Messages,
+): ResultProfile {
   const { totals, themes } = scoreAnswers(answers);
   const ranked = rankDimensions(totals);
   const primary = ranked[0] ?? "interest";
@@ -149,13 +177,13 @@ export function buildResultProfile(answers: AnswerMap): ResultProfile {
   const styleKey = pickStyleKey(themes);
 
   return {
-    overview: pickOverview(primary, secondary),
-    strengths: pickStrengths(primary, secondary),
-    interests: pickInterests(themes),
-    goals: pickGoals(themes, totals),
-    learningStyle: STYLE_COPY[styleKey],
-    preparation: pickPreparation(totals),
-    tips: STARTER_TIPS_BY_STYLE[styleKey],
+    overview: pickOverview(messages, primary, secondary),
+    strengths: pickStrengths(messages, primary, secondary),
+    interests: pickInterests(messages, themes),
+    goals: pickGoals(messages, themes, totals),
+    learningStyle: messages.styleCopy[styleKey],
+    preparation: pickPreparation(messages, totals),
+    tips: messages.starterTipsByStyle[styleKey],
     primaryDimension: primary,
     secondaryDimension: secondary,
     totals,
@@ -163,7 +191,7 @@ export function buildResultProfile(answers: AnswerMap): ResultProfile {
 }
 
 export function isComplete(answers: AnswerMap): boolean {
-  return questions.every((q) => Boolean(answers[q.id]));
+  return questionDefs.every((q) => Boolean(answers[q.id]));
 }
 
 export function mergeScores(base: ScoreMap, add: ScoreMap): ScoreMap {

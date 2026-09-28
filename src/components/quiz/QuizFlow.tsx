@@ -1,15 +1,25 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { QuestionCard } from "@/components/quiz/QuestionCard";
 import { ProgressBar } from "@/components/quiz/ProgressBar";
 import { Button } from "@/components/ui/Button";
-import { questions, TOTAL_QUESTIONS } from "@/data/questions";
+import { TOTAL_QUESTIONS } from "@/data/question-defs";
+import { defaultLocale, isLocale, type Locale } from "@/i18n/config";
+import { getLocalizedQuestions, getMessages } from "@/i18n/get-messages";
+import { localizedPath } from "@/i18n/path";
 import { clearAnswers, loadAnswers, saveAnswers } from "@/lib/quiz-storage";
 
 export function QuizFlow() {
   const router = useRouter();
+  const params = useParams();
+  const locale: Locale = isLocale(String(params?.locale))
+    ? (String(params.locale) as Locale)
+    : defaultLocale;
+  const messages = useMemo(() => getMessages(locale), [locale]);
+  const questions = useMemo(() => getLocalizedQuestions(locale), [locale]);
+
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [ready, setReady] = useState(false);
@@ -26,18 +36,18 @@ export function QuizFlow() {
 
   if (!ready) {
     return (
-      <div className="mx-auto max-w-2xl px-4 py-16 text-center sm:px-6">
-        <p className="text-lg">กำลังโหลดควิซ…</p>
+      <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6">
+        <p className="text-lg">{messages.quiz.loading}</p>
       </div>
     );
   }
 
   if (!question) {
     return (
-      <div className="mx-auto max-w-2xl px-4 py-16 text-center sm:px-6">
-        <p className="text-lg">ไม่พบคำถาม</p>
-        <Button href="/" className="mt-6">
-          กลับหน้าแรก
+      <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6">
+        <p className="text-lg">{messages.quiz.missing}</p>
+        <Button href={localizedPath(locale)} className="mt-6">
+          {messages.quiz.backHome}
         </Button>
       </div>
     );
@@ -47,9 +57,11 @@ export function QuizFlow() {
     return (
       <div className="mx-auto flex max-w-3xl flex-col items-center px-4 py-20 text-center sm:px-6">
         <div className="quiz-box w-full max-w-xl rounded-2xl shadow-sm">
-          <p className="text-2xl font-bold sm:text-3xl">กำลังสรุปผล…</p>
+          <p className="text-2xl font-bold sm:text-3xl">
+            {messages.quiz.summarizing}
+          </p>
           <p className="mt-4 text-lg sm:text-xl">
-            กำลังจัดโปรไฟล์ของคุณให้อ่านง่ายๆ สักครู่
+            {messages.quiz.summarizingHint}
           </p>
         </div>
       </div>
@@ -58,12 +70,17 @@ export function QuizFlow() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10">
-      <ProgressBar current={index + 1} total={TOTAL_QUESTIONS} />
+      <ProgressBar
+        current={index + 1}
+        total={TOTAL_QUESTIONS}
+        labelTemplate={messages.quiz.progress}
+      />
 
       <div className="mt-8">
         <QuestionCard
           question={question}
           selectedId={selectedId}
+          hint={messages.quiz.hint}
           onSelect={(choice) => {
             const next = { ...answers, [question.id]: choice.id };
             setAnswers(next);
@@ -79,7 +96,7 @@ export function QuizFlow() {
           onClick={() => setIndex((i) => Math.max(0, i - 1))}
           className="w-full sm:w-auto"
         >
-          ย้อนกลับ
+          {messages.quiz.back}
         </Button>
         <Button
           disabled={!selectedId}
@@ -92,16 +109,16 @@ export function QuizFlow() {
             }
             setSubmitting(true);
             window.setTimeout(() => {
-              router.push("/result");
+              router.push(localizedPath(locale, "/result"));
             }, 700);
           }}
         >
-          {isLast ? "ดูผลลัพธ์" : "ถัดไป"}
+          {isLast ? messages.quiz.seeResults : messages.quiz.next}
         </Button>
       </div>
 
       <p className="mt-8 text-center text-sm text-black/75">
-        อยากเริ่มใหม่?{" "}
+        {messages.quiz.restartPrompt}{" "}
         <button
           type="button"
           className="font-semibold underline underline-offset-4"
@@ -111,7 +128,7 @@ export function QuizFlow() {
             setIndex(0);
           }}
         >
-          ล้างคำตอบทั้งหมด
+          {messages.quiz.clearAnswers}
         </button>
       </p>
     </div>
