@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  /* Clearer, more saturated red at ~50% opacity (was rgba(220, 80, 80, 0.5)) */
-  --bg-red: rgba(210, 32, 32, 0.52);
+  /* Saturated red wash ~50% opacity — clearly red, not soft pink */
+  --bg-red: rgba(196, 12, 12, 0.55);
   --text: #000000;
   --quiz-box: rgba(100, 170, 230, 0.55);
-  --btn-primary: #d04545;
+  --btn-primary: #c93434;
   --btn-primary-text: #000000;
   --accent-blue: #4a9fd4;
   --progress-track: rgba(0, 0, 0, 0.08);
   --progress-fill: #4a9fd4;
-  /* Warmer under-surface so the red wash reads redder, not pink-beige */
-  --surface-under: #ffe3dc;
-  --surface-under-mid: #ffd6cc;
+  /* Red-tinted under-surface so the composite reads red, not beige/pink */
+  --surface-under: #ffc2b3;
+  --surface-under-mid: #ffab96;
   --font-site: "CS Prajad", "Sarabun", "Noto Sans Thai", "Tahoma", sans-serif;
   /* Content / question boxes ~2× prior scale */
   --content-box-pad: 2.5rem;
@@ -67,8 +67,8 @@ body {
   isolation: isolate;
   background-color: var(--surface-under);
   background-image:
-    radial-gradient(rgba(180, 40, 40, 0.06) 1px, transparent 1px),
-    linear-gradient(160deg, #ffe8e0 0%, #ffd9cf 45%, var(--surface-under-mid) 100%);
+    radial-gradient(rgba(160, 20, 20, 0.08) 1px, transparent 1px),
+    linear-gradient(160deg, #ffc8b8 0%, #ffb09a 50%, var(--surface-under-mid) 100%);
   background-size:
     18px 18px,
     auto;
