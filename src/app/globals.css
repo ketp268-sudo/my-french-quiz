@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+:root {
+  --bg-red: rgba(220, 80, 80, 0.5);
+  --text: #000000;
+  --quiz-box: rgba(100, 170, 230, 0.55);
+  --btn-primary: #d45a5a;
+  --btn-primary-text: #000000;
+  --accent-blue: #4a9fd4;
+  --progress-track: rgba(0, 0, 0, 0.08);
+  --progress-fill: #4a9fd4;
+  --surface-under: #fff5f2;
+  --font-site: "CS Prajad", "Sarabun", "Noto Sans Thai", "Tahoma", sans-serif;
+}
+
+@theme inline {
+  --color-background: var(--surface-under);
+  --color-foreground: var(--text);
+  --font-sans: var(--font-site);
+}
+
+@font-face {
+  font-family: "CS Prajad";
+  src:
+    url("/fonts/CSPrajad.woff2") format("woff2"),
+    url("/fonts/CSPrajad.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "CS Prajad";
+  src:
+    url("/fonts/CSPrajad-Bold.woff2") format("woff2"),
+    url("/fonts/CSPrajad-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color: var(--text);
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  color: var(--text);
+  font-family: var(--font-site);
+  background: var(--surface-under);
+}
+
+.site-bg {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--surface-under);
+  background-image:
+    radial-gradient(rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+    linear-gradient(160deg, #fff8f5 0%, #f3f8fc 55%, #fff5f2 100%);
+  background-size:
+    18px 18px,
+    auto;
+}
+
+.site-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--bg-red);
+}
+
+.quiz-box {
+  background: var(--quiz-box);
+  color: var(--text);
+  backdrop-filter: blur(2px);
+}
+
+a {
+  color: inherit;
+}
